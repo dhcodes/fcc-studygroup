@@ -23,37 +23,32 @@ let options = {
  
   // Optional depending on the providers 
   httpAdapter: 'https', // Default 
-  apiKey: 'AIzaSyAkLMmqiXiVLr2bpo3jOHLY4ITbH6ox9zo', // for Mapquest, OpenCage, Google Premier 
+  apiKey: '', // for Mapquest, OpenCage, Google Premier 
   formatter: null         // 'gpx', 'string', ... 
 };
  
 let geocoder = NodeGeocoder(options);
- 
-// Using callback 
-/*
-geocoder.geocode('29 champs elysée paris', function(err, res) {
-  console.log(res);
-});
-*/
-let json = [];
-function updateData(data, arr) {
-    data.map((item,index) =>  {
-    geocoder.geocode(item.city + ', ' + item.state + ', ' + item.country, (err, res) => {
-    try {
-    item.latitude = res[0].latitude.toString();
-    item.longitude = res[0].longitude.toString();
-    arr.push(item);
-    //item.latitude = res[index].latitude.toString()
-    //item.longitude = res[index].longitude.toString()
+
+
+let json = data.map((obj) =>  {
+        geocoder.geocode(obj.city + ', ' + obj.state + ', ' + obj.country, (err, res) => {
+            if (err) {
+        console.log(err)
+    }
+    else {
+        
+        obj.latitude = res[0].latitude.toString();
+        obj.longitude = res[0].longitude.toString();
+        
 }
-catch(err) {
-    console.log(err)
-}
-    })
+    console.log(obj)
+})
+    return obj;
 })
 
-}
-updateData(data, json)
+console.log(json)
+
+
 
 
 //fs.writeFile('./assets/json/campsiteclone.json', json)
